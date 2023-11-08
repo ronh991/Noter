@@ -21,7 +21,7 @@ from . import __name__ as addon_name
 
 custom_scene_name = ".Noter_Data"
 
-class Notes_List_actions(Operator):
+class Notes_List_actions_object(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "notes_list_object.list_action"
     bl_label = ""
@@ -70,7 +70,7 @@ class Notes_List_actions(Operator):
 
         return {"FINISHED"}
 
-class Notes_List_actions_add(Operator):
+class Notes_List_actions_add_object(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "notes_list_object.list_action_add"
     bl_label = ""
@@ -102,7 +102,7 @@ class Notes_List_actions_add(Operator):
         act_obj.notes_list_object_index = len(act_obj.notes_list_object) - 1
         return {"FINISHED"}
 
-class Notes_List_clearList(Operator):
+class Notes_List_clearList_object(Operator):
     """Clear all items of the list"""
     bl_idname = "notes_list_object.clear_list"
     bl_label = "Clear List"
@@ -124,7 +124,7 @@ class Notes_List_clearList(Operator):
             self.report({'INFO'}, "Nothing to remove")
         return{'FINISHED'}
 
-class Notes_actions_bool(Operator):
+class Notes_List_actions_bool_object(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "notes_list_object.list_action_bool"
     bl_label = ""
@@ -150,6 +150,155 @@ class Notes_actions_bool(Operator):
             act_obj.notes_list_object[idx].bool = True
             act_obj.notes_list_object.move(idx, len(act_obj.notes_list_object) - 1)
         # if bpy.context.active_object:
+            # bpy.context.window_manager.setprecisemesh.length = item.unit
+            # bpy.context.region.tag_redraw()
+            # context.area.tag_redraw()
+            # bpy.context.scene.update()
+            # for region in context.area.regions:
+            #     if region.type == "UI":
+            #         region.tag_redraw()
+            # bpy.data.scenes.update()
+            
+            # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+            # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1)
+            # print("Warning because of Set Precise Mesh")
+            # bpy.ops.wm.redraw_timer(type = "UNDO", iterations = 1, time_limit = 0.0)
+            # bpy.ops.wm.redraw_timer(type = "DRAW_WIN", iterations = 1, time_limit = 0.0)
+            # bpy.ops.wm.redraw_timer(type = "DRAW_SWAP", iterations = 1, time_limit = 0.0)
+            # bpy.ops.wm.redraw_timer(type = "DRAW", iterations = 1, time_limit = 0.0)
+        # else:
+            # self.report({'INFO'}, "Nothing selected in the Viewport")
+        return {"FINISHED"}
+
+class Notes_List_actions_material(Operator):
+    """Move items up and down, add and remove"""
+    bl_idname = "notes_list_material.list_action"
+    bl_label = ""
+    bl_description = "Move items up and down or remove"
+    bl_options = {'REGISTER'}
+
+    action: bpy.props.EnumProperty(
+        items=(
+            ('UP', "Up", ""),
+            ('DOWN', "Down", ""),
+            ('REMOVE', "Remove", ""),
+            # ('ADD', "Add", "") 
+            ))
+
+    @classmethod
+    def description(cls, context, properties):
+        if properties.action == 'REMOVE':
+            return "Remove"
+        elif properties.action == 'UP':
+            return "Up"
+        elif properties.action == 'DOWN':
+            return "Down"
+
+    def invoke(self, context, event):
+        act_mat = context.active_object.active_material
+        idx = act_mat.notes_list_material_index
+        try:
+            item = act_mat.notes_list_material[idx]
+        except IndexError:
+            pass
+        else:
+            if self.action == 'DOWN' and idx < len(act_mat.notes_list_material) - 1:
+                act_mat.notes_list_material.move(idx, idx+1)
+                act_mat.notes_list_material_index += 1
+
+            elif self.action == 'UP' and idx >= 1:
+                act_mat.notes_list_material.move(idx, idx-1)
+                act_mat.notes_list_material_index -= 1
+                
+            elif self.action == 'REMOVE':
+                if idx == 0:
+                    act_mat.notes_list_material_index = 0
+                else:
+                    act_mat.notes_list_material_index -= 1
+                act_mat.notes_list_material.remove(idx)
+
+        return {"FINISHED"}
+
+class Notes_List_actions_add_material(Operator):
+    """Move items up and down, add and remove"""
+    bl_idname = "notes_list_material.list_action_add"
+    bl_label = ""
+    bl_description = "Add item"
+    bl_options = {'REGISTER'}
+    # bl_options = {'BLOCKING'}
+    # bl_options = {'INTERNAL'}
+
+    # def draw(self, context):
+    #     layout = self.layout
+    #     layout.prop(self, "text_input", text = "Name")
+
+    # def invoke(self, context, event):
+    #     self.unit_input = bpy.context.window_manager.setprecisemesh.length
+    #     return context.window_manager.invoke_props_dialog(self)
+
+    @classmethod
+    def description(cls, context, properties):
+        return "Add"
+
+    def execute(self, context):
+        act_mat = context.active_object.active_material
+        idx = act_mat.notes_list_material_index
+        try:
+            item = act_mat.notes_list_material[idx]
+        except IndexError:
+            pass
+        item = act_mat.notes_list_material.add()
+        act_mat.notes_list_material_index = len(act_mat.notes_list_material) - 1
+        return {"FINISHED"}
+
+class Notes_List_clearList_material(Operator):
+    """Clear all items of the list"""
+    bl_idname = "notes_list_material.clear_list"
+    bl_label = "Clear List"
+    bl_description = "Clear all items of the list"
+    bl_options = {'INTERNAL'}
+
+    @classmethod
+    def poll(cls, context):
+        return bool(context.active_object.active_material.notes_list_material)
+
+    def invoke(self, context, event):
+        return context.window_manager.invoke_confirm(self, event)
+
+    def execute(self, context):
+        if bool(context.active_object.active_material.notes_list_material):
+            context.active_object.active_material.notes_list_material.clear()
+            self.report({'INFO'}, "All items removed")
+        else:
+            self.report({'INFO'}, "Nothing to remove")
+        return{'FINISHED'}
+
+class Notes_List_actions_bool_material(Operator):
+    """Move items up and down, add and remove"""
+    bl_idname = "notes_list_material.list_action_bool"
+    bl_label = ""
+    bl_description = "Checkmark"
+    bl_options = {'REGISTER'}
+
+    my_index: IntProperty()
+
+    def execute(self, context):
+        # bpy.context.active_object.active_material.notes_list_material_index = self.my_index
+        act_mat = context.active_object.active_material.active_material
+        # idx = act_mat.notes_list_material_index
+        idx = self.my_index
+        try:
+            item = act_mat.notes_list_material[idx]
+        except IndexError:
+            pass
+        if act_mat.notes_list_material[idx].bool == True:
+            act_mat.notes_list_material[idx].bool = False
+            if len(act_mat.notes_list_material)>1:
+                act_mat.notes_list_material.move(idx, 0)
+        else:
+            act_mat.notes_list_material[idx].bool = True
+            act_mat.notes_list_material.move(idx, len(act_mat.notes_list_material) - 1)
+        # if bpy.context.active_object.active_material:
             # bpy.context.window_manager.setprecisemesh.length = item.unit
             # bpy.context.region.tag_redraw()
             # context.area.tag_redraw()
@@ -274,7 +423,7 @@ class Notes_List_clearList_scene(Operator):
             self.report({'INFO'}, "Nothing to remove")
         return{'FINISHED'}
 
-class Notes_actions_bool_scene(Operator):
+class Notes_List_actions_bool_scene(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "notes_list_scene.list_action_bool"
     bl_label = ""
@@ -424,7 +573,7 @@ class Notes_List_clearList_blender_file(Operator):
             self.report({'INFO'}, "Nothing to remove")
         return{'FINISHED'}
 
-class Notes_actions_bool_blender_file(Operator):
+class Notes_List_actions_bool_blender_file(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "notes_list_blender_file.list_action_bool"
     bl_label = ""
@@ -805,7 +954,7 @@ class NOTES_LIST_UL_items_material(UIList):
         column = box.column(align = 1)
         row_header = column.row(align = 1)
         row_header.scale_y = .8
-        if bpy.context.object.notes_list_material[index].bool == True:
+        if bpy.context.material.notes_list_material[index].bool == True:
             row_info = row_header.row(align = 1)
             row_info.operator("notes_list_material.list_action_bool", text = "", icon = "CHECKBOX_DEHLT", emboss = 0).my_index = index
             row_info.alignment = 'RIGHT'
@@ -857,7 +1006,7 @@ class Notes_List_PT_material(Panel):
         act_mat = bpy.context.active_object.active_material
         rows = 3
         row = layout.row()
-        row.template_list("NOTES_LIST_UL_items_object", "", act_mat, "notes_list_object", act_mat, "notes_list_object_index", rows=rows)
+        row.template_list("NOTES_LIST_UL_items_material", "", act_mat, "notes_list_material", act_mat, "notes_list_material_index", rows=rows)
         col = row.column(align=True)
         col.scale_x = 1.1
         col.scale_y = 1.2
@@ -888,24 +1037,28 @@ class Notes_List_Collection(PropertyGroup):
 
 Notes_list_blender_classes = [
     Notes_List_Collection,
-    Notes_List_actions,
-    Notes_List_actions_add,
+    Notes_List_actions_object,
+    Notes_List_actions_add_object,
+    Notes_List_actions_bool_object,
+    Notes_List_clearList_object,
     NOTES_LIST_UL_items_object,
-    NOTES_LIST_UL_items_material,
     Notes_List_PT_object,
+    Notes_List_actions_material,
+    Notes_List_actions_add_material,
+    Notes_List_actions_bool_material,
+    Notes_List_clearList_material,
+    NOTES_LIST_UL_items_material,
     Notes_List_PT_material,
-    Notes_actions_bool,
-    Notes_List_clearList,
     Notes_List_actions_scene,
     Notes_List_actions_add_scene,
     Notes_List_clearList_scene,
-    Notes_actions_bool_scene,
+    Notes_List_actions_bool_scene,
     NOTES_LIST_UL_items_scene,
     Notes_List_PT_scene,
     Notes_List_actions_blender_file,
     Notes_List_actions_add_blender_file,
     Notes_List_clearList_blender_file,
-    Notes_actions_bool_blender_file,
+    Notes_List_actions_bool_blender_file,
     NOTES_LIST_UL_items_blender_file,
     Notes_List_PT_blender_file,
 ]

@@ -31,7 +31,7 @@ bl_info = {
     "author" : "Rovh, ronh991",
     "description" : "Noter is an add-on created to increase productivity in Blender by organizing the workflow.",
     "blender" : (2, 90, 0),
-    "version" : (1, 1, 1),
+    "version" : (1, 2, 0),
     "location" : "Text Editor > Sidebar > Noter Tab",
     "warning" : "",
     "category" : "System",
