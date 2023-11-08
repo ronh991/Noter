@@ -2,14 +2,15 @@
 
 # <a name="noter">Noter</a>
 Noter is an add-on created to increase productivity in Blender by organizing the workflow.
+Ver 1.1.1 ronh991 - added Material to things you can add text too.
 
 ---
 
 With Noter you can:
 
-* Annotate a specific object, scene or file(.blend).
+* Annotate a specific object, material, scene or file(.blend).
 
-* Create notes lists for the object, scene or file(.blend).
+* Create notes lists for the object, material or scene.
 
 * Save the text in the Blender itself so that it will be available in any file(.blend).
 
@@ -17,22 +18,20 @@ With Noter you can:
 
 * Enable Noter Splash Screen for file(.blend) so as not to forget if there is anything unfinished left when you open a file(.blend).
 
-* Adds operators for working on text
 
+Noter has different functionalities:
 
-Noter can be divided into several parts:
-
-* <a href="#new_version_features">New Version Features</a>
+* <a href="#version">Version</a>
 * <a href="#main_panel">Main Panel</a>
 * <a href="#splash_screen">Splash Screen</a>
 * <a href="#notes_tree">Notes Tree</a>
 * <a href="#notes_list">Notes List</a>
-* <a href="#little_parts">Little Parts (Tips)</a>
+* <a href="#little_parts">Tips</a>
 
 
 ---
 
-## <a name="new_version_features">New Version Features</a>
+## <a name="versions">Version</a>
 
 <a href="https://drive.google.com/file/d/1RhE3c2v5PimIsyQAtwFrXwpxKkMyiU7t/preview" target="_self">
 <img src="https://drive.google.com/uc?id=13GurVT8n-5c3BOIbsqXrA9TFEYzlbQAk" width=50% height=50% alt = "Video" style="border-radius: 30px">
@@ -84,7 +83,7 @@ location: Editor Type > Properties > Scene or Object
 
 ---
 
-## <a name="little_parts">Little Parts (Tips)</a>
+## <a name="little_parts">Tips</a>
 
 If Noter didn't find the text the button won't be displayed.
 
@@ -96,14 +95,6 @@ In order to read a specific note, you don't have to go to the Text Editor. You c
 * Topbar > File > Note
 
 ---
-
-
-
-
-
-
-
-
 
 
 
