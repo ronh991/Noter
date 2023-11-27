@@ -31,7 +31,7 @@ bl_info = {
     "author" : "Rovh, ronh991",
     "description" : "Noter is an add-on created to increase productivity in Blender by organizing the workflow.",
     "blender" : (2, 90, 0),
-    "version" : (1, 2, 0),
+    "version" : (1, 2, 1),
     "location" : "Text Editor > Sidebar > Noter Tab",
     "warning" : "",
     "category" : "System",
@@ -1053,9 +1053,10 @@ class MATERIAL_PT_note (Panel):
 
     def draw(self, context):
         if (bpy.context.active_object is not None):
-            text = bpy.context.active_object.active_material.note_text_material
-            if bool(text) == True:
-                draw_text(self, text)
+            if (bpy.context.active_object.active_material is not None):
+                text = bpy.context.active_object.active_material.note_text_material
+                if bool(text) == True:
+                    draw_text(self, text)
 
 class SCENE_PT_note (Panel):
     bl_space_type = 'PROPERTIES'
@@ -1699,7 +1700,7 @@ def unregister():
     del bpy.types.Scene.splash_screen
     del bpy.types.Scene.splash_screen_notes_list
     del bpy.types.Object.note_text_object
-    del bpy.types.Material.note_text_materialslot
+    del bpy.types.Material.note_text_material
     del bpy.types.Scene.note_text_scene
     del bpy.types.Scene.note_text_blender_file
     del bpy.types.Scene.note_text_splash_screen

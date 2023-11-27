@@ -998,29 +998,32 @@ class Notes_List_PT_material(Panel):
         return bpy.context.scene != None and check
 
     def draw_header(self, context):
-        layout = self.layout
-        layout.label(text = 'Notes List   >   Material', icon = 'FILE')
+        act_mat = bpy.context.active_object.active_material
+        if (act_mat is not None):
+            layout = self.layout
+            layout.label(text = 'Notes List   >   Material', icon = 'FILE')
 
     def draw(self, context):
-        layout = self.layout
         act_mat = bpy.context.active_object.active_material
-        rows = 3
-        row = layout.row()
-        row.template_list("NOTES_LIST_UL_items_material", "", act_mat, "notes_list_material", act_mat, "notes_list_material_index", rows=rows)
-        col = row.column(align=True)
-        col.scale_x = 1.1
-        col.scale_y = 1.2
-        col.operator("notes_list_material.list_action_add", icon='ADD', text="")
-        col.operator("notes_list_material.list_action", icon='REMOVE', text="").action = 'REMOVE'
-        col.separator(factor = 0.4)
-        col.operator("notes_list_material.list_action", icon='TRIA_UP', text="").action = 'UP'
-        col.operator("notes_list_material.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
-        col.separator(factor = 0.4)
-        col.operator('window_manager.export_note_text', text = '', icon = 'IMPORT').action = 'material*'
-        col.separator(factor = 0.4)
-        col.operator('window_manager.export_note_text', text = '', icon = 'EXPORT').action = 'material_get*'
-        col.separator(factor = 0.4)
-        col.operator("notes_list_material.clear_list", icon="TRASH", text = "")
+        if (act_mat is not None):
+            layout = self.layout
+            rows = 3
+            row = layout.row()
+            row.template_list("NOTES_LIST_UL_items_material", "", act_mat, "notes_list_material", act_mat, "notes_list_material_index", rows=rows)
+            col = row.column(align=True)
+            col.scale_x = 1.1
+            col.scale_y = 1.2
+            col.operator("notes_list_material.list_action_add", icon='ADD', text="")
+            col.operator("notes_list_material.list_action", icon='REMOVE', text="").action = 'REMOVE'
+            col.separator(factor = 0.4)
+            col.operator("notes_list_material.list_action", icon='TRIA_UP', text="").action = 'UP'
+            col.operator("notes_list_material.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
+            col.separator(factor = 0.4)
+            col.operator('window_manager.export_note_text', text = '', icon = 'IMPORT').action = 'material*'
+            col.separator(factor = 0.4)
+            col.operator('window_manager.export_note_text', text = '', icon = 'EXPORT').action = 'material_get*'
+            col.separator(factor = 0.4)
+            col.operator("notes_list_material.clear_list", icon="TRASH", text = "")
 
 class Notes_List_Collection(PropertyGroup):
 
